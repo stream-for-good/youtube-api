@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  php:
+    build: ./docker/php
+    volumes: ['./:/var/www/youtube-api.s4g.miage.dev:cached']
+  nginx:
+    build: ./docker/nginx
+    volumes: ['./:/var/www/youtube-api.s4g.miage.dev:cached']

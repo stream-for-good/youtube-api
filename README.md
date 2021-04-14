@@ -26,7 +26,6 @@ run docker and connect to container:
 ```
 install composer for symfony
 ```
-# traditional web application: 
 composer install
 ```
 

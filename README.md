@@ -24,21 +24,12 @@ run docker and connect to container:
 ```
  docker-compose exec php sh
 ```
-install latest version of [Symfony](http://symfony.com/doc/current/setup.html) via composer:
+install composer for symfony
 ```
 # traditional web application: 
-composer create-project symfony/website-skeleton .
-```
-or 
-```
-# microservice, console application or API:
-composer create-project symfony/skeleton .
+composer install
 ```
 
-modify your DATABASE_URL config in .env 
-```
-DATABASE_URL=mysql://root:root@mysql:3306/symfony?serverVersion=5.7
-```
 ### Ready up
 call [localhost](http://localhost/) in your browser
 

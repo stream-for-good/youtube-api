@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  traefik:
+    image: traefik:v2.4
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--accesslog=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=contact@vod-prime.space"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--log.level=DEBUG"
+    ports:
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/log/traefik/:/var/log"
+
+  php:
+    image: stream4good/youtube-api-php
+    ports: ['9000:9000']
+    environment:
+      - "APP_ENV=dev"
+      - "APP_SECRET=44337def4a6f25da0f7a252cb6001e1f"
+      - "DATABASE_URL=mysql://svocale:n7Hc3K8mQ@hn105529-001.dbaas.ovh.net:35552/youtube?serverVersion=5.7"
+      - "CORS_ALLOW_ORIGIN='*'"
+
+  web:
+    image: stream4good/youtube-api-web
+    ports: ['80:80']    
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.tls.certresolver=myresolver"
+      - "traefik.http.routers.web.rule=host(`youtube-api-s4g.miage.dev`)"
+      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.http.services.web.loadbalancer.server.port=80"

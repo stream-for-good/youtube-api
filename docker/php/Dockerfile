@@ -17,12 +17,21 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
     ln -s $(composer config --global home) /root/composer
 ENV PATH=$PATH:/root/composer/vendor/bin COMPOSER_ALLOW_SUPERUSER=1
 
-ADD php.ini /etc/php/conf.d/
-ADD php.ini /etc/php/cli/conf.d/
-ADD php.ini /usr/local/etc/php
-ADD php-fpm.conf /etc/php/php-fpm.d/
+ADD ./docker/php/php.ini /etc/php/conf.d/
+ADD ./docker/php/php.ini /etc/php/cli/conf.d/
+ADD ./docker/php/php.ini /usr/local/etc/php
+ADD ./docker/php/php-fpm.conf /etc/php/php-fpm.d/
+
+
+RUN mkdir -p /var/www/youtube-api.s4g.miage.dev/var/cache/dev
+RUN chmod ugo+w -R /var/www/youtube-api.s4g.miage.dev/var/cache/dev
+
+RUN mkdir -p /var/www/youtube-api.s4g.miage.dev/var/log
+RUN chmod ugo+w -R /var/www/youtube-api.s4g.miage.dev/var/log
 
 WORKDIR /var/www/youtube-api.s4g.miage.dev
+COPY ./synfony/ /var/www/youtube-api.s4g.miage.dev
+RUN composer install
 
 EXPOSE 9000
 

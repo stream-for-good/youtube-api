@@ -30,7 +30,7 @@ RUN mkdir -p /var/www/youtube-api.s4g.miage.dev/var/log
 RUN chmod ugo+w -R /var/www/youtube-api.s4g.miage.dev/var/log
 
 WORKDIR /var/www/youtube-api.s4g.miage.dev
-COPY ./synfony/ /var/www/youtube-api.s4g.miage.dev
+COPY ./symfony/ /var/www/youtube-api.s4g.miage.dev
 RUN composer install
 
 EXPOSE 9000

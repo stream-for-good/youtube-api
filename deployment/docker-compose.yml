@@ -6,7 +6,7 @@ services:
     environment:
       - "APP_ENV=dev"
       - "APP_SECRET=44337def4a6f25da0f7a252cb6001e1f"
-      - "DATABASE_URL=mysql://svocale:n7Hc3K8mQ@hn105529-001.dbaas.ovh.net:35552/youtube?serverVersion=5.7"
+      - "DATABASE_URL=mysql://:@/?serverVersion=5.7"
       - "CORS_ALLOW_ORIGIN='*'"
       - "PREFIX='https://youtube-api-s4g.miage.dev'"
       - "REDIS_LINK='redis://localhost'"

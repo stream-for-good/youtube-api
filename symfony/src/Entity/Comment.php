@@ -5,9 +5,26 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Dto\DataOutput;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      shortName="All Comments",
+ *      collectionOperations={
+ *          "get"={
+ *              "output"=DataOutput::class,
+ *              "path"="/comments",
+ *              "formats"={"json"}
+ *          }
+ *      },
+ *      itemOperations={
+ *          "get"={
+ *              "output"=DataOutput::class,
+ *              "path"="/comment/{id}",
+ *              "formats"={"json"}
+ *           }
+ *      }
+ * )
  * @ORM\Entity(repositoryClass=CommentRepository::class)
  */
 class Comment
@@ -20,23 +37,24 @@ class Comment
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $author;
 
     /**
      * @ORM\ManyToOne(targetEntity=Video::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE") 
      */
     private $video;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $text;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $publishedAt;
 

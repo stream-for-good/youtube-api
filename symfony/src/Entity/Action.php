@@ -7,9 +7,26 @@ use App\Repository\ActionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Dto\DataOutput;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      shortName="All Actions",
+ *      collectionOperations={
+ *          "get"={
+ *              "output"=DataOutput::class,
+ *              "path"="/actions",
+ *              "formats"={"json"}
+ *          }
+ *      },
+ *      itemOperations={
+ *          "get"={
+ *              "output"=DataOutput::class,
+ *              "path"="/action/{id}",
+ *              "formats"={"json"}
+ *           }
+ *      }
+ * )
  * @ORM\Entity(repositoryClass=ActionRepository::class)
  */
 class Action

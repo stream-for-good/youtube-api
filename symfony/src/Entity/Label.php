@@ -9,7 +9,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      shortName="All Labels",
+ *      collectionOperations={"get"={"path"="/labels"}},
+ *      itemOperations={"get"={"path"="/label/{id}"}}
+ * )
  * @ORM\Entity(repositoryClass=LabelRepository::class)
  */
 class Label

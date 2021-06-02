@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use Doctrine\ORM\Mapping as ORM;
 
-final class EmnsLinksOutput {
+final class LinksOutput {
     
     /**
      * @ORM\Column(type="array")

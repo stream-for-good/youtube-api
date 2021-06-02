@@ -26,20 +26,10 @@ final class LogsOutput {
     public $videos;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
      */
-    public $viewCount;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    public $likeCount;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    public $dislikeCount;
-
+    public $key_word;
+    
     public function getSession(): ?string
     {
         return $this->session;
@@ -64,6 +54,18 @@ final class LogsOutput {
         return $this;
     }
 
+    public function getKey_word(): ?string
+    {
+        return $this->key_word;
+    }
+
+    public function setKey_word(string $key_word): self
+    {
+        $this->key_word = $key_word;
+
+        return $this;
+    }
+
     public function getAction(): ?int
     {
         return $this->action;
@@ -71,39 +73,6 @@ final class LogsOutput {
     public function setAction(int $action): self
     {
         $this->action = $action;
-
-        return $this;
-    }
-
-    public function getViewCount(): ?int
-    {
-        return $this->viewCount;
-    }
-    public function setViewCount(int $viewCount): self
-    {
-        $this->viewCount = $viewCount;
-
-        return $this;
-    }
-
-    public function getLikeCount(): ?int
-    {
-        return $this->likeCount;
-    }
-    public function setLikeCount(int $likeCount): self
-    {
-        $this->likeCount = $likeCount;
-
-        return $this;
-    }
-
-    public function getDislikeCount(): ?int
-    {
-        return $this->dislikeCount;
-    }
-    public function setDislikeCount(int $dislikeCount): self
-    {
-        $this->dislikeCount = $dislikeCount;
 
         return $this;
     }

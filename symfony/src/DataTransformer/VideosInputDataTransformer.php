@@ -6,7 +6,6 @@ namespace App\DataTransformer;
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Video;
-use App\Entity\VideoInfo;
 use App\Entity\VideoLabel;
 use App\Entity\Channel;
 use App\Entity\ChannelLabel;
@@ -54,8 +53,7 @@ final class VideosInputDataTransformer extends AbstractController  implements Da
 
         if($checkVideo)
         {
-            $newVideoInfo = new VideoInfo();
-            $newVideoInfo->setVideo($checkVideo);
+
             if($checkChannel)
             {
                 $newChannelLabel = new ChannelLabel();
@@ -63,7 +61,6 @@ final class VideosInputDataTransformer extends AbstractController  implements Da
                 $newChannelLabel->setLabel($addLabel);
                 $em->persist($newChannelLabel);
 
-                $newVideoInfo->setChannel($checkChannel);
                 
             }
             else
@@ -79,13 +76,9 @@ final class VideosInputDataTransformer extends AbstractController  implements Da
 
                 $em->persist($newChannelLabel);
 
-                $newVideoInfo->setChannel($newChannel);
             }
-            $newVideoInfo->setTitle($item["title"]);
-            $newVideoInfo->setLanguage($item["language"]);
-            $newVideoInfo->setDuration($item["duration"]);
-            // $newVideoInfo->setPublishedAt($item["publishedAt"]);
-            $em->persist($newVideoInfo);
+
+
 
             $newVideoLabel = new VideoLabel();
             $newVideoLabel->setVideo($checkVideo);
@@ -98,7 +91,7 @@ final class VideosInputDataTransformer extends AbstractController  implements Da
 
         }
 
-        return $newVideoInfo;
+        return $checkVideo;
  
     }
 

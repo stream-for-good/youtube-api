@@ -5,9 +5,26 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ChannelLabelRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Dto\DataOutput;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      shortName="All ChannelsLabel",
+ *      collectionOperations={
+ *          "get"={
+ *              "output"=DataOutput::class,
+ *              "path"="/channels/label",
+ *              "formats"={"json"}
+ *          }
+ *      },
+ *      itemOperations={
+ *          "get"={
+ *              "output"=DataOutput::class,
+ *              "path"="/channel/label/{id}",
+ *              "formats"={"json"}
+ *           }
+ *      }
+ * )
  * @ORM\Entity(repositoryClass=ChannelLabelRepository::class)
  */
 class ChannelLabel
@@ -20,7 +37,7 @@ class ChannelLabel
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Channel::class, inversedBy="channelLabels")
+     * @ORM\OneToOne(targetEntity=Channel::class, inversedBy="channelLabel", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $channel;
@@ -28,6 +45,7 @@ class ChannelLabel
     /**
      * @ORM\ManyToOne(targetEntity=Label::class, inversedBy="channelLabels")
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE") 
      */
     private $label;
 
@@ -35,22 +53,9 @@ class ChannelLabel
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
-
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getChannel(): ?Channel
-    {
-        return $this->channel;
-    }
-
-    public function setChannel(?Channel $channel): self
-    {
-        $this->channel = $channel;
-
-        return $this;
     }
 
     public function getLabel(): ?Label
@@ -73,6 +78,18 @@ class ChannelLabel
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getChannel(): ?Channel
+    {
+        return $this->channel;
+    }
+
+    public function setChannel(Channel $channel): self
+    {
+        $this->channel = $channel;
 
         return $this;
     }

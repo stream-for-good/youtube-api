@@ -16,6 +16,16 @@ final class LogsInput {
     public $action;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    public $index;
+        
+    /**
+     * @ORM\Column(type="integer")
+     */
+    public $position;
+
+    /**
      * @ORM\Column(type="string", length=255)
     */
     public $currentVideo;
@@ -25,6 +35,11 @@ final class LogsInput {
      */
     public $videos;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    public $key_word;
+    
     public function getSession(): ?string
     {
         return $this->session;
@@ -49,6 +64,18 @@ final class LogsInput {
         return $this;
     }
 
+    public function getKey_word(): ?string
+    {
+        return $this->key_word;
+    }
+
+    public function setKey_word(string $key_word): self
+    {
+        $this->key_word = $key_word;
+
+        return $this;
+    }
+
     public function getAction(): ?int
     {
         return $this->action;
@@ -57,6 +84,28 @@ final class LogsInput {
     {
         $this->action = $action;
 
+        return $this;
+    }
+
+    public function getIndex(): ?int
+    {
+        return $this->index;
+    }
+    public function setIndex(int $index): self
+    {
+        $this->index = $index;
+       
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+    public function setPosition(int $position): self
+    {
+        $this->position = $position;
+       
         return $this;
     }
 

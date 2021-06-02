@@ -89,20 +89,29 @@ class OneSessionOutputDataTransformer extends AbstractController implements Item
                         'rel' => 'log_id',
                         'href' => $logLink
                     ];
-            
+
+        $actionLink = $prefix . "/api/action/" . $l->getAction()->getId();
+        $actionLinkArray = [
+            'name' => $l->getAction()->getName(),
+            'rel' => 'action_id',
+            'href' => $actionLink
+        ];
+
+        $links = array($logLinkArray, $actionLinkArray);
+
             if(!empty($l->getCurrentVideo()))
             {
             $sub_log = array(
                 'logID'=>$l->getId(),
-                'actionID'=>$l->getAction()->getId().' ('.$l->getAction()->getName().')',
+                'actionID'=>$l->getAction()->getId(),
                 'currentVideo'=>$l->getCurrentVideo()->getId(),
-                'links'=>$logLinkArray
+                'links'=>$links
             );
         }
         else{
             $sub_log = array(
                 'logID'=>$l->getId(),
-                'actionID'=>$l->getAction()->getId().' ('.$l->getAction()->getName().')',
+                'actionID'=>$l->getAction()->getId(),
                 'links'=>$logLinkArray
             );   
         }
@@ -114,7 +123,7 @@ class OneSessionOutputDataTransformer extends AbstractController implements Item
         
         $dataSend = [
             "id"=>$data->getId(),
-            "create"=>$data->getCreateAt(),
+            "create"=>$data->getCreateAt()->format('Y-m-d H:i:s'),
             "logs" => $log
         ];
 

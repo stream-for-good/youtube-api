@@ -42,27 +42,25 @@ class OneLogOutputDataTransformer extends AbstractController implements ItemData
         $skip = false;
         $redisLink = $this->const_redis_link;
         $expiration = $this->const_long_expiration;
-        $cacheKey = 'OneLog_'.$id;
-        
+        $cacheKey = 'OneLog_' . $id;
+
         try {
             $cache = RedisAdapter::createConnection($redisLink);
             $cache->exists($cacheKey);
         } catch (Exception $e) {
             $skip = true;
         }
-        if($skip){
+        if ($skip) {
             $msg = $this->queryData($id);
-        }
-        else{
-            if(!$cache->exists($cacheKey)){
+        } else {
+            if (!$cache->exists($cacheKey)) {
                 $msg = $this->queryData($id);
-                if(!empty($msg) && !array_key_exists('err',$msg)){
+                if (!empty($msg) && !array_key_exists('err', $msg)) {
                     $redisMsg = json_encode($msg);
                     $cache->set($cacheKey, $redisMsg);
                     $cache->expire($cacheKey, $expiration);
                 }
-            }
-            else{
+            } else {
                 $msg = json_decode($cache->get($cacheKey), true);
             }
         }
@@ -73,7 +71,7 @@ class OneLogOutputDataTransformer extends AbstractController implements ItemData
 
     private function queryData($id): array
     {
-        
+
         $idLog = $id;
         $msg = [];
         $captures = [];
@@ -82,62 +80,64 @@ class OneLogOutputDataTransformer extends AbstractController implements ItemData
 
         $prefix = $this->const_prefix;
 
-        $sessionLink = $prefix . "/api/session/". $data->getSession()->getId();
+        $actionLink = $prefix . "/api/action/" . $data->getAction()->getId();
+        $actionLinkArray = [
+            'name' => $data->getAction()->getName(),
+            'rel' => 'action_id',
+            'href' => $actionLink
+        ];
+
+        $sessionLink = $prefix . "/api/session/" . $data->getSession()->getId();
         $sessionLinkArray = [
             'rel' => 'session_id',
             'href' => $sessionLink
         ];
 
-        if(!empty($data->getCurrentVideo()))
-        {
-        $videoLink = $prefix . "/api/video/". $data->getCurrentVideo()->getId();
-        $videoLinkArray = [
-            'rel' => 'current_video_id',
-            'href' => $videoLink
-        ];
-        $links = array($sessionLinkArray, $videoLinkArray);
-    }
-        else
-        {
+        if (!empty($data->getCurrentVideo())) {
+            $videoLink = $prefix . "/api/video/" . $data->getCurrentVideo()->getId();
+            $videoLinkArray = [
+                'rel' => 'current_video_id',
+                'href' => $videoLink
+            ];
+            $links = array($actionLinkArray, $sessionLinkArray, $videoLinkArray);
+        } else {
             $links = array($sessionLinkArray);
         }
 
         foreach ($data->getCaptures() as $l) {
             $captureLink = $prefix . "/api/capture/" . $l->getId();
             $captureLinkArray = [
-                        'rel' => 'capture_id',
-                        'href' => $captureLink
-                    ];
+                'rel' => 'capture_id',
+                'href' => $captureLink
+            ];
 
             $videoLink = $prefix . "/api/video/" . $l->getVideo()->getId();
             $videoLinkArray = [
-                        'rel' => 'video_id',
-                        'href' => $videoLink
-                    ];  
+                'rel' => 'video_id',
+                'href' => $videoLink
+            ];
 
             $sub_capture = array(
-                'captureID'=>$l->getId(),
-                'videoID'=>$l->getVideo()->getId(),
-                'position'=>$l->getPosition(),
-                'links'=>array($captureLinkArray,$videoLinkArray)
-            );   
+                'captureID' => $l->getId(),
+                'videoID' => $l->getVideo()->getId(),
+                'position' => $l->getPosition(),
+                'links' => array($captureLinkArray, $videoLinkArray)
+            );
             array_push($captures, $sub_capture);
-            
         }
 
         $capture = array($captures);
-        
+
         $dataSend = [
-            "logID"=>$data->getId(),
-            "sessionID"=>$data->getSession()->getId(),
-            'actionID'=>$data->getAction()->getId().' ('.$data->getAction()->getName().')'
+            "logID" => $data->getId(),
+            "sessionID" => $data->getSession()->getId(),
+            'actionID' => $data->getAction()->getId()
         ];
 
-        if(!empty($data->getCurrentVideo()))
-        {
-        $dataSend["currendVideo"] = $data->getCurrentVideo()->getId();
+        if (!empty($data->getCurrentVideo())) {
+            $dataSend["currendVideo"] = $data->getCurrentVideo()->getId();
         }
-        $dataSend["create"] = $data->getCreateAt();
+        $dataSend["create"] = $data->getCreateAt()->format('Y-m-d H:i:s');
         $dataSend["links"] = $links;
         $dataSend["captures"] = $capture;
 
@@ -151,6 +151,6 @@ class OneLogOutputDataTransformer extends AbstractController implements ItemData
      */
     public function supportsTransformation($data, string $to, array $context = []): bool
     {
-        return DataOutput::class === $to ;
+        return DataOutput::class === $to;
     }
 }

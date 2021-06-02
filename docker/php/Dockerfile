@@ -32,6 +32,8 @@ RUN chmod ugo+w -R /var/www/youtube-api.s4g.miage.dev/var/log
 WORKDIR /var/www/youtube-api.s4g.miage.dev
 COPY ./symfony/ /var/www/youtube-api.s4g.miage.dev
 RUN composer install
+RUN rm vendor/php-amqplib/rabbitmq-bundle/RabbitMq/Producer.php
+COPY ./symfony/bundle/Producer.php /var/www/youtube-api.s4g.miage.dev/vendor/php-amqplib/rabbitmq-bundle/RabbitMq
 
 EXPOSE 9000
 

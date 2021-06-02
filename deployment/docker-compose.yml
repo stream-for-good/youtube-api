@@ -8,6 +8,11 @@ services:
       - "APP_SECRET=44337def4a6f25da0f7a252cb6001e1f"
       - "DATABASE_URL=mysql://svocale:n7Hc3K8mQ@hn105529-001.dbaas.ovh.net:35552/youtube?serverVersion=5.7"
       - "CORS_ALLOW_ORIGIN='*'"
+      - "PREFIX='https://youtube-api-s4g.miage.dev'"
+      - "REDIS_LINK='redis://localhost'"
+      - "SHORT_EXPIRATION=3600"
+      - "LONG_EXPIRATION=3600*24"
+      - "RABBITMQ_URL=amqp://admin:Veipheibochah7gi2iwa7eeho@broker-s4g.miage.dev:5672"
 
   web:
     image: stream4good/youtube-api-web

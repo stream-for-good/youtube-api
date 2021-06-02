@@ -41,12 +41,14 @@ class Capture
     /**
      * @ORM\ManyToOne(targetEntity=Log::class, inversedBy="captures")
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE") 
      */
     private $log;
 
     /**
      * @ORM\ManyToOne(targetEntity=Video::class, inversedBy="captures")
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE") 
      */
     private $video;
 
@@ -55,14 +57,8 @@ class Capture
      */
     private $position;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Stat::class, mappedBy="capture", orphanRemoval=true)
-     */
-    private $stats;
-
     public function __construct()
     {
-        $this->stats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -106,33 +102,4 @@ class Capture
         return $this;
     }
 
-    /**
-     * @return Collection|Stat[]
-     */
-    public function getStats(): Collection
-    {
-        return $this->stats;
-    }
-
-    public function addStat(Stat $stat): self
-    {
-        if (!$this->stats->contains($stat)) {
-            $this->stats[] = $stat;
-            $stat->setCapture($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStat(Stat $stat): self
-    {
-        if ($this->stats->removeElement($stat)) {
-            // set the owning side to null (unless already changed)
-            if ($stat->getCapture() === $this) {
-                $stat->setCapture(null);
-            }
-        }
-
-        return $this;
-    }
 }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Video;
+use App\Entity\Caption;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -26,11 +27,30 @@ class VideoRepository extends ServiceEntityRepository
     public function findByAllVideosInArray($array)
     {
         return $this->createQueryBuilder('v')
-            ->andWhere('v.id IN (:val)')
+            ->where('v.id IN (:val)')
             ->setParameter('val', $array)
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function findByStatus()
+    {
+        return $this->createQueryBuilder('v')
+            ->where('v.status = true')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findCaption(string $id)
+    {
+        return $this->createQueryBuilder('s')
+            ->from(Caption::class, 'u')
+            ->andWhere('u.video !=' .$id)
+            ->andWhere('s.id =' .$id)
+            ->getQuery()
+            ->getResult();
     }
 
 

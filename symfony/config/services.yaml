@@ -27,6 +27,14 @@ services:
     App\Controller\:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
+        
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    App\Swagger\SwaggerDecorator:
+        decorates: 'api_platform.swagger.normalizer.api_gateway'
+        arguments: [ '@App\Swagger\SwaggerDecorator.inner' ]
+        autoconfigure: false
+    # api/config/services.yaml
 
     App\DataTransformer\:
         resource: '../src/DataTransformer/*'
@@ -37,3 +45,10 @@ services:
             $const_long_expiration: '%env(LONG_EXPIRATION)%'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    message_service:
+        class: App\Rabbit\MessageConsumer
+
+    App\Rabbit\MessagingProducer: '@old_sound_rabbit_mq.messaging_producer'

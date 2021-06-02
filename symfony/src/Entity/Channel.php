@@ -9,9 +9,26 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Dto\DataOutput;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      shortName="All Channels",
+ *      collectionOperations={
+ *          "get"={
+ *              "output"=DataOutput::class,
+ *              "path"="/channels",
+ *              "formats"={"json"}
+ *          }
+ *      },
+ *      itemOperations={
+ *          "get"={
+ *              "output"=DataOutput::class,
+ *              "path"="/channel/{id}",
+ *              "formats"={"json"}
+ *           }
+ *      }
+ * )
  * @ORM\Entity(repositoryClass=ChannelRepository::class)
  * @UniqueEntity("id")
  */
@@ -30,19 +47,18 @@ class Channel
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=VideoInfo::class, mappedBy="channel")
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="channel")
      */
-    private $videoInfos;
+    private $videos;
 
     /**
-     * @ORM\OneToMany(targetEntity=ChannelLabel::class, mappedBy="channel", orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity=ChannelLabel::class, mappedBy="channel", cascade={"persist", "remove"})
      */
-    private $channelLabels;
+    private $channelLabel;
 
     public function __construct()
     {
-        $this->videoInfos = new ArrayCollection();
-        $this->channelLabels = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -69,63 +85,49 @@ class Channel
         return $this;
     }
 
-
     /**
-     * @return Collection|VideoInfo[]
+     * @return Collection|Video[]
      */
-    public function getVideoInfos(): Collection
+    public function getVideos(): Collection
     {
-        return $this->videoInfos;
+        return $this->videos;
     }
 
-    public function addVideoInfo(VideoInfo $videoInfo): self
+    public function addVideo(Video $video): self
     {
-        if (!$this->videoInfos->contains($videoInfo)) {
-            $this->videoInfos[] = $videoInfo;
-            $videoInfo->setChannel($this);
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setChannel($this);
         }
 
         return $this;
     }
 
-    public function removeVideoInfo(VideoInfo $videoInfo): self
+    public function removeVideo(Video $video): self
     {
-        if ($this->videoInfos->removeElement($videoInfo)) {
+        if ($this->videos->removeElement($video)) {
             // set the owning side to null (unless already changed)
-            if ($videoInfo->getChannel() === $this) {
-                $videoInfo->setChannel(null);
+            if ($video->getChannel() === $this) {
+                $video->setChannel(null);
             }
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection|ChannelLabel[]
-     */
-    public function getChannelLabels(): Collection
+    public function getChannelLabel(): ?ChannelLabel
     {
-        return $this->channelLabels;
+        return $this->channelLabel;
     }
 
-    public function addChannelLabel(ChannelLabel $channelLabel): self
+    public function setChannelLabel(ChannelLabel $channelLabel): self
     {
-        if (!$this->channelLabels->contains($channelLabel)) {
-            $this->channelLabels[] = $channelLabel;
+        // set the owning side of the relation if necessary
+        if ($channelLabel->getChannel() !== $this) {
             $channelLabel->setChannel($this);
         }
 
-        return $this;
-    }
-
-    public function removeChannelLabel(ChannelLabel $channelLabel): self
-    {
-        if ($this->channelLabels->removeElement($channelLabel)) {
-            // set the owning side to null (unless already changed)
-            if ($channelLabel->getChannel() === $this) {
-                $channelLabel->setChannel(null);
-            }
-        }
+        $this->channelLabel = $channelLabel;
 
         return $this;
     }

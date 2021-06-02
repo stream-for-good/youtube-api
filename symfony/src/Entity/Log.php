@@ -58,18 +58,35 @@ class Log
     /**
      * @ORM\ManyToOne(targetEntity=Action::class, inversedBy="logs")
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE") 
      */
     private $action;
 
     /**
      * @ORM\ManyToOne(targetEntity=Video::class, inversedBy="logs")
+     * @ORM\JoinColumn(onDelete="CASCADE") 
      */
     private $currentVideo;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $words;
+    
+    /**
      * @ORM\Column(type="datetime")
      */
     private $createAt;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $actionNumber;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $indexVideo;
 
     public function __construct()
     {
@@ -156,6 +173,42 @@ class Log
     public function setCreateAt(\DateTime $createAt): self
     {
         $this->createAt = $createAt;
+
+        return $this;
+    }
+
+    public function getWords(): ?string
+    {
+        return $this->words;
+    }
+
+    public function setWords(?string $words): self
+    {
+        $this->words = $words;
+
+        return $this;
+    }
+
+    public function getActionNumber(): ?int
+    {
+        return $this->actionNumber;
+    }
+
+    public function setActionNumber(?int $actionNumber): self
+    {
+        $this->actionNumber = $actionNumber;
+
+        return $this;
+    }
+
+    public function getIndexVideo(): ?int
+    {
+        return $this->indexVideo;
+    }
+
+    public function setIndexVideo(?int $indexVideo): self
+    {
+        $this->indexVideo = $indexVideo;
 
         return $this;
     }

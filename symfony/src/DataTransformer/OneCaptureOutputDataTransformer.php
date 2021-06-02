@@ -95,16 +95,6 @@ class OneCaptureOutputDataTransformer extends AbstractController implements Item
         ];
 
         $links = array($logLinkArray, $videoLinkArray);
-
-        foreach ($data->getStats() as $s) {
-
-            $sub_stat = array(
-            );   
-            array_push($stats, $sub_stat);
-            
-        }
-
-        $stat = array($stats);
         
         $dataSend = [
             "captureID"=>$data->getId(),
@@ -112,9 +102,7 @@ class OneCaptureOutputDataTransformer extends AbstractController implements Item
             "videoID"=>$data->getVideo()->getId(),
             "position"=>$data->getPosition()
         ];
-
         $dataSend["links"] = $links;
-        $dataSend["stats"] = $stat;
 
         array_push($msg, $dataSend);
 

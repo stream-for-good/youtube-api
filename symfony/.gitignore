@@ -9,4 +9,6 @@
 /src/Controller/MessageController.php
 /var/
 /vendor/
+symfony.lock
+composer.lock
 ###< symfony/framework-bundle ###

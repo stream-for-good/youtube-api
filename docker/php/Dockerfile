@@ -12,6 +12,8 @@ RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
     install-php-extensions \
     mysqli \
     pdo_mysql
+RUN docker-php-ext-install bcmath
+RUN docker-php-ext-install sockets
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     ln -s $(composer config --global home) /root/composer

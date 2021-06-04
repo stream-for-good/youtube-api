@@ -5,6 +5,7 @@
     "prefer-stable": true,
     "require": {
         "php": ">=7.2.5",
+        "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/core": "^2.6",
@@ -16,6 +17,7 @@
         "nelmio/cors-bundle": "^2.1",
         "php-amqplib/rabbitmq-bundle": "^2.6",
         "phpdocumentor/reflection-docblock": "^5.2",
+        "predis/predis": "^1.1",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "5.2.*",
         "symfony/console": "5.2.*",

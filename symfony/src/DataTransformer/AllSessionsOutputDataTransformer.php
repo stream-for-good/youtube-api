@@ -91,7 +91,7 @@ final class AllSessionsOutputDataTransformer extends AbstractController implemen
 
             $dataSend = [
                 "id"=>$value->getId(),
-                "create"=>$value->getCreateAt(),
+                "create"=>$value->getCreateAt()->format('Y-m-d H:i:s'),
                 "links"=>$links
             ];
 

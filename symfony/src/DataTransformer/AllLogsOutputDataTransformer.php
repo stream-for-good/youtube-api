@@ -51,6 +51,7 @@ final class AllLogsOutputDataTransformer extends AbstractController implements C
             $cache->exists($cacheKey);
         } catch (Exception $e) {
             $skip = true;
+            dump("error");
         }
         if($skip){
             $msg = $this->queryData();
@@ -94,13 +95,20 @@ final class AllLogsOutputDataTransformer extends AbstractController implements C
                 'href' => $sessionLink
             ];
 
-            $links = array($logLinkArray, $sessionLinkArray);
+            $actionLink = $prefix . "/api/action/" . $value->getAction()->getId();
+            $actionLinkArray = [
+                'name' => $value->getAction()->getName(),
+                'rel' => 'action_id',
+                'href' => $actionLink
+            ];
+
+            $links = array($logLinkArray, $sessionLinkArray, $actionLinkArray);
             if($value->getCurrentVideo() != null)
             {
             $dataSend = [
                 "id"=>$value->getId(),
                 "sessionID"=>$value->getSession()->getId(),
-                'actionID'=>$value->getAction()->getId().' ('.$value->getAction()->getName().')',
+                'actionID'=>$value->getAction()->getId(),
                 "current_video"=>$value->getCurrentVideo()->getId(),
                 "links"=>$links
             ];
@@ -109,7 +117,7 @@ final class AllLogsOutputDataTransformer extends AbstractController implements C
                 $dataSend = [
                     "id"=>$value->getId(),
                     "sessionID"=>$value->getSession()->getId(),
-                    'actionID'=>$value->getAction()->getId().' ('.$value->getAction()->getName().')',
+                    'actionID'=>$value->getAction()->getId(),
                     "links"=>$links
                 ];     
             }

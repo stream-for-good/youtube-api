@@ -101,7 +101,7 @@ class OneLogOutputDataTransformer extends AbstractController implements ItemData
             ];
             $links = array($actionLinkArray, $sessionLinkArray, $videoLinkArray);
         } else {
-            $links = array($sessionLinkArray);
+            $links = array($actionLinkArray, $sessionLinkArray);
         }
 
         foreach ($data->getCaptures() as $l) {

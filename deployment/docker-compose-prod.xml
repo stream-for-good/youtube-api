@@ -26,14 +26,14 @@ services:
     ports: ['9000:9000']
     environment:
       - "APP_ENV=dev"
-      - "APP_SECRET=44337def4a6f25da0f7a252cb6001e1f"
-      - "DATABASE_URL=mysql://:@/?serverVersion=5.7"
+      - "APP_SECRET="
+      - "DATABASE_URL=mysql://userdb:password@localhost/namedb?serverVersion=5.7"
       - "CORS_ALLOW_ORIGIN='*'"
-      - "PREFIX='https://youtube-api-s4g.miage.dev'"
+      - "PREFIX="
       - "REDIS_LINK='redis://localhost'"
       - "SHORT_EXPIRATION=3600"
       - "LONG_EXPIRATION=3600*24"
-      - "RABBITMQ_URL=amqp://admin:Veipheibochah7gi2iwa7eeho@broker-s4g.miage.dev:5672"
+      - "RABBITMQ_URL="
 
   web:
     image: stream4good/youtube-api-web

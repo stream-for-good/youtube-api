@@ -1,0 +1,8 @@
+{
+    "php": {
+        "version": "7.4"
+    },
+    "predis/predis": {
+        "version": "v1.1.7"
+    }
+}

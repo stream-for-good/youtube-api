@@ -112,7 +112,7 @@ class OneSessionOutputDataTransformer extends AbstractController implements Item
             $sub_log = array(
                 'logID'=>$l->getId(),
                 'actionID'=>$l->getAction()->getId(),
-                'links'=>$logLinkArray
+                'links'=>$links
             );   
         }
             array_push($logs, $sub_log);

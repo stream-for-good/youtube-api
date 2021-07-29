@@ -51,7 +51,6 @@ final class AllLogsOutputDataTransformer extends AbstractController implements C
             $cache->exists($cacheKey);
         } catch (Exception $e) {
             $skip = true;
-            dump("error");
         }
         if($skip){
             $msg = $this->queryData();

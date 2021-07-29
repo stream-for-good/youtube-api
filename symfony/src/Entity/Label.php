@@ -40,10 +40,16 @@ class Label
      */
     private $channelLabels;
 
+    /**
+     * @ORM\OneToMany(targetEntity=AccountLabel::class, mappedBy="label", orphanRemoval=true)
+     */
+    private $accountLabels;
+
     public function __construct()
     {
         $this->videoLabels = new ArrayCollection();
         $this->channelLabels = new ArrayCollection();
+        $this->accountLabels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -117,6 +123,36 @@ class Label
             // set the owning side to null (unless already changed)
             if ($channelLabel->getLabel() === $this) {
                 $channelLabel->setLabel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AccountLabel[]
+     */
+    public function getAccountLabels(): Collection
+    {
+        return $this->accountLabels;
+    }
+
+    public function addAccountLabel(AccountLabel $accountLabel): self
+    {
+        if (!$this->accountLabels->contains($accountLabel)) {
+            $this->accountLabels[] = $accountLabel;
+            $accountLabel->setLabel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccountLabel(AccountLabel $accountLabel): self
+    {
+        if ($this->accountLabels->removeElement($accountLabel)) {
+            // set the owning side to null (unless already changed)
+            if ($accountLabel->getLabel() === $this) {
+                $accountLabel->setLabel(null);
             }
         }
 

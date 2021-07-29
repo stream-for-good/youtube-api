@@ -35,24 +35,72 @@ class MessageService
     public function createMessage(string $videoYB): JsonResponse
     {
 
-        // $takenLabel = $this->repoLabel->find(1);
-        // $checkVideo = $this->repoVideo->find($videoYB);
+        $takenLabel = $this->repoLabel->find(1);
+        $checkVideo = $this->repoVideo->find($videoYB);
 
         $message = '[["' . $videoYB . '"], {}, {"callbacks": null, "errbacks": null, "chain": null, "chord": null}]';
 
-        // if (is_null($checkVideo)) {
-        //     $newVideo = new Video();
-        //     $newVideo->setId($videoYB);
-        //     $newVideo->setStatus(false);
-        //     $this->em->persist($newVideo);
+        if (is_null($checkVideo)) {
+            $newVideo = new Video();
+            $newVideo->setId($videoYB);
+            $newVideo->setStatus(false);
+            $this->em->persist($newVideo);
 
-        //     $newVideoLabel = new VideoLabel();
-        //     $newVideoLabel->setLabel($takenLabel);
-        //     $newVideoLabel->setVideo($newVideo);
-        //     $this->em->persist($newVideoLabel);
+            $newVideoLabel = new VideoLabel();
+            $newVideoLabel->setLabel($takenLabel);
+            $newVideoLabel->setVideo($newVideo);
+            $this->em->persist($newVideoLabel);
 
-        //     $this->em->flush();
-        // }
+            $this->em->flush();
+        }
+
+
+        $this->videoMetaData->setId(Uuid::v4());
+        $this->videoMetaData->setContentType('application/json');
+        $this->videoMetaData->setResponseQueue('youtube-response');
+        $this->videoMetaData->setTask('youtube.scrap_video_metadata');
+        $this->videoMetaData->publish($message);
+
+        $this->videoComment->setId(Uuid::v4());
+        $this->videoComment->setContentType('application/json');
+        $this->videoComment->setResponseQueue('youtube-response');
+        $this->videoComment->setTask('youtube.scrap_comment');
+        $this->videoComment->publish($message);
+
+        $this->videoCaptions->setId(Uuid::v4());
+        $this->videoCaptions->setContentType('application/json');
+        $this->videoCaptions->setResponseQueue('youtube-response');
+        $this->videoCaptions->setTask('youtube.scrap_captions');
+        $this->videoCaptions->publish($message);
+
+        return new JsonResponse(['status' => 'Sent!']);
+    }
+
+    public function createMessageJson(string $videoYB, string $label): JsonResponse
+    {
+
+        $takenLabel = $this->repoLabel->find(1);
+        $checkVideo = $this->repoVideo->find($videoYB);
+
+        $message = '[["' . $videoYB . '"], {}, {"callbacks": null, "errbacks": null, "chain": null, "chord": null}]';
+
+        if (is_null($checkVideo)) {
+            $newVideo = new Video();
+            $newVideo->setId($videoYB);
+            $newVideo->setStatus(false);
+            $this->em->persist($newVideo);
+
+            $checkLabel = $this->repoLabel->find($label);
+
+            if(!is_null($checkLabel))
+            {
+            $newVideoLabel = new VideoLabel();
+            $newVideoLabel->setLabel($checkLabel);
+            $newVideoLabel->setVideo($newVideo);
+            $this->em->persist($newVideoLabel);
+            }
+            $this->em->flush();
+        }
 
 
         $this->videoMetaData->setId(Uuid::v4());

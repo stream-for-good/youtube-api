@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use Doctrine\ORM\Mapping as ORM;
 
-final class SessionInput {
+final class SessionOutput {
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      */

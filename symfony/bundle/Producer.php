@@ -81,6 +81,7 @@ class Producer extends BaseAmqp implements ProducerInterface
             ));
             $msg->set('application_headers', $headersTable);
 
+        $this->getChannel()->queue_declare('youtube-response', false, true, false, false);
         $this->getChannel()->basic_publish($msg, $this->exchangeOptions['name'], (string)$routingKey);
         $this->logger->debug('AMQP message published', array(
             'amqp' => array(

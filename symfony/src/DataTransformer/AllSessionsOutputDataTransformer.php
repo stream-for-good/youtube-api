@@ -75,7 +75,7 @@ final class AllSessionsOutputDataTransformer extends AbstractController implemen
     {
 
         $msg = [];
-        $data = $this->repoSession->findAll();
+        $data = $this->repoSession->findBy([],['createAt'=>'DESC']);
             
         $prefix = $this->const_prefix;
 

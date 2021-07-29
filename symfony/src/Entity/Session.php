@@ -11,12 +11,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Dto\DataOutput;
 use App\Dto\SessionInput;
+use App\Dto\SessionOutput;
 
 /**
  * @ApiResource(
  *      shortName="All Sessions",
  *      collectionOperations={
  *          "post"={
+ *          "input"=SessionOutput::class,
  *          "output"=SessionInput::class,
  *          "path"="/session/new"
  *          },
@@ -57,6 +59,11 @@ class Session
      * @ORM\OneToMany(targetEntity=Log::class, mappedBy="session", orphanRemoval=true)
      */
     private $logs;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=AccountLabel::class, inversedBy="sessions")
+     */
+    private $accountLabel;
 
     public function __construct()
     {
@@ -114,6 +121,18 @@ class Session
     public function setId(string $id): self
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getAccountLabel(): ?AccountLabel
+    {
+        return $this->accountLabel;
+    }
+
+    public function setAccountLabel(?AccountLabel $accountLabel): self
+    {
+        $this->accountLabel = $accountLabel;
 
         return $this;
     }
